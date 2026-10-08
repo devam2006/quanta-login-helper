@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "Quanta Login Helper",
+  "version": "2.0.0",
+  "description": "Select your college Google account only during BITS Quanta login. Independent, unofficial helper.",
+  "permissions": [
+    "storage"
+  ],
+  "icons": {
+    "48": "icons/48.png",
+    "96": "icons/96.png",
+    "128": "icons/128.png"
+  },
+  "action": {
+    "default_title": "Quanta login settings",
+    "default_popup": "options.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://quanta.bits-pilani.ac.in/login/index.php*",
+        "https://accounts.google.com/*"
+      ],
+      "js": [
+        "core.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
