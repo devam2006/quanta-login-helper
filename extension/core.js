@@ -19,7 +19,7 @@
   function choose(emails, preferred = "") {
     const unique = [...new Set(emails.map(x => x.trim().toLowerCase()))];
     if (preferred) return unique.find(x => x === preferred.toLowerCase() && college(x)) || null;
-    const matches = unique.filter(student);
+    const matches = unique.filter(college);
     return matches.length === 1 ? matches[0] : null;
   }
   globalThis.Quanta = Object.freeze({ student, college, quantaFlow, choose });

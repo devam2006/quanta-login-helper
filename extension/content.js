@@ -37,7 +37,7 @@
           .filter(x => x.card && x.card.getClientRects().length && x.card.getAttribute('aria-disabled') !== 'true');
         const email = Quanta.choose(cards.map(x => x.email), settings.preferredEmail);
         if (!cards.length) report('Waiting for visible Google account cards.');
-        else if (!email) report(settings.preferredEmail ? 'Preferred college account is not listed. Check your saved email.' : 'No unique student account: set your preferred college email, or choose manually.');
+        else if (!email) report(settings.preferredEmail ? 'Preferred college account is not listed. Check your saved email.' : 'No unique college account: set your preferred college email, or choose manually.');
         target = cards.find(x => x.email.trim().toLowerCase() === email)?.card;
       }
       if (target && target.getClientRects().length) {

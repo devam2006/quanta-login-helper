@@ -10,6 +10,11 @@ const one='f20260000@goa.bits-pilani.ac.in', two='f20260001@hyd.bits-pilani.ac.i
 test('Quanta SAML accepted',()=>assert.equal(Q.quantaFlow(valid),true));
 for(const [name,url] of Object.entries({ordinary:'https://accounts.google.com/v3/signin/accountchooser?continue=https://mail.google.com',otherSite:flow('https://example.com/auth/saml2/login.php'),lookalike:flow('https://quanta.bits-pilani.ac.in.evil.test/auth/saml2/login.php'),http:flow(relay.replace('https:','http:')),wrongPath:flow('https://quanta.bits-pilani.ac.in/my/'),wrongIdp:flow(relay,'other'),password:valid.replace('accountchooser','challenge/pwd'),malformed:'garbage'})) test('Reject '+name,()=>assert.equal(Q.quantaFlow(url),false));
 test('One student selected',()=>assert.equal(Q.choose(['person@gmail.com',one]),one));
+test('College account without student prefix selected',()=>assert.equal(Q.choose(['person@gmail.com','example@goa.bits-pilani.ac.in']),'example@goa.bits-pilani.ac.in'));
+test('Multiple college accounts left manual',()=>assert.equal(Q.choose([one,'example@goa.bits-pilani.ac.in']),null));
+test('Lookalike college suffix not selected',()=>assert.equal(Q.choose(['example@goa.bits-pilani.ac.in.evil.test']),null));
+test('Future campus college account selected',()=>assert.equal(Q.choose(['example@newcampus.bits-pilani.ac.in']),'example@newcampus.bits-pilani.ac.in'));
+test('Preferred college account still overrides ambiguity',()=>assert.equal(Q.choose([one,'example@goa.bits-pilani.ac.in'],'example@goa.bits-pilani.ac.in'),'example@goa.bits-pilani.ac.in'));
 test('Multiple students left manual',()=>assert.equal(Q.choose([one,two]),null));
 test('Preferred account selected',()=>assert.equal(Q.choose([one,two],two),two));
 test('Missing preferred account never substitutes',()=>assert.equal(Q.choose([one],two),null));
