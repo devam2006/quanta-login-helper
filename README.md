@@ -1,6 +1,10 @@
-# Quanta Login Helper 2.0.0
+# Quanta Login Helper 2.0.1
 
 Unofficial BITS Quanta helper for desktop Firefox 140+ and current desktop Chrome. Not affiliated with BITS, Google, or Mozilla.
+
+## Firefox update (2.0.1)
+
+Open the extension popup. If it says site access is missing, click Allow Quanta and Google login access and accept the browser prompt. Save your preferred college email if more than one account is listed. Reload the chooser. The popup shows a local last-attempt status to help diagnose a stopped login. The helper now tolerates Firefox denying page storage and retries cards that become visible after initial rendering. Live Firefox account selection is still awaiting user verification.
 
 ## What changed
 
@@ -13,7 +17,7 @@ Without a preferred email, only one visible account matching f20 + six digits + 
 ## Chrome: install now
 
 1. Remove the old extension first so its script cannot keep selecting your account.
-2. Extract quanta-login-chrome-2.0.0.zip into a permanent folder; keep that folder in place.
+2. Extract quanta-login-chrome-2.0.1.zip into a permanent folder; keep that folder in place.
 3. Open chrome://extensions, turn on Developer mode, select Load unpacked, and choose that folder.
 4. Open the extension's toolbar popup or its extension options. Optionally save your college email.
 5. Open Quanta's login page. Sign in to your college Google account manually first if it is not listed.
@@ -24,7 +28,7 @@ The unpacked extension remains registered after Chrome restarts as long as its f
 
 The supplied Firefox ZIP is a submission package, not a signed installable add-on. Renaming it to .xpi does not sign it.
 
-1. Sign in at https://addons.mozilla.org/developers/ and submit quanta-login-firefox-2.0.0.zip.
+1. Sign in at https://addons.mozilla.org/developers/ and submit quanta-login-firefox-2.0.1.zip.
 2. Choose self-distribution (unlisted) to get a Mozilla-signed .xpi for your friend group, or choose distribution on addons.mozilla.org for a public listing. Follow validation/review steps.
 3. Download the signed .xpi. In Firefox open about:addons, select the gear menu, then Install Add-on From File and select it. Share that signed file with friends, or share the public listing link.
 4. Open the extension options and save your preferred college email if needed. Enable site access to Quanta and accounts.google.com if Firefox asks.
@@ -36,7 +40,7 @@ The Firefox add-on ID is a generic stable project identifier. Keep it unchanged 
 
 ## Chrome Web Store submission
 
-Sign in at https://chrome.google.com/webstore/devconsole and complete developer registration. Create a new item and upload quanta-login-chrome-2.0.0.zip. Supply the store listing, category, actual browser screenshots, privacy disclosures, and any required reviewer information. Choose an unlisted listing for link sharing if available, or public visibility. Submit for review. No store submission or signing has been performed here.
+Sign in at https://chrome.google.com/webstore/devconsole and complete developer registration. Create a new item and upload quanta-login-chrome-2.0.1.zip. Supply the store listing, category, actual browser screenshots, privacy disclosures, and any required reviewer information. Choose an unlisted listing for link sharing if available, or public visibility. Submit for review. No store submission or signing has been performed here.
 
 Suggested listing title: Quanta Login Helper
 
@@ -50,7 +54,7 @@ Use PRIVACY.md as the basis for the privacy policy; publish it at a public URL i
 
 ## Verification and limits
 
-25 automated routing/account-selection/content-script checks passed, including non-Quanta sign-in, deceptive hostnames, wrong identity provider, password screens, multiple accounts, missing preferred email, disable switch, logout, dashboard and click cooldown. JavaScript syntax checks passed. No third-party runtime dependencies or remote code.
+28 automated routing/account-selection/content-script checks passed, including non-Quanta sign-in, deceptive hostnames, wrong identity provider, password screens, multiple accounts, missing preferred email, disable switch, logout, dashboard and click cooldown. JavaScript syntax checks passed. No third-party runtime dependencies or remote code.
 
 The public Quanta login page was checked and still presents Login via BITS Gmail. An authenticated browser login, Firefox/Chrome installation, store validation and signed-install persistence have NOT been tested here. Google's live DOM may change; the extension deliberately leaves login manual when its known account-card markers are missing. The identity-provider ID is based on the supplied sign-in URL and may need updating if BITS changes providers. Transient authentication token values from your link are not bundled.
 

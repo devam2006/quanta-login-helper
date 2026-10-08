@@ -19,12 +19,19 @@ test('Suffix spoof rejected',()=>assert.equal(Q.college('f20260000@goa.bits-pila
 async function run(url,emails,settings={}, extra={}) {
  let clicks=0; const location=new URL(url); const cards=emails.map(email=>({getAttribute:k=>k==='data-identifier'?email:null,closest:()=>({getClientRects:()=>[1],getAttribute:()=>null,click:()=>clicks++})}));
  const button={href:'https://quanta.bits-pilani.ac.in/auth/saml2/login.php?idp=abc',textContent:'Login via BITS Gmail',getClientRects:()=>[1],click:()=>clicks++};
- const ctx={URL,location,window:{},chrome:{storage:{local:{get:async()=>({enabled:true,preferredEmail:'',...settings})},onChanged:{addListener:()=>{}}}},document:{documentElement:{},querySelector:()=>null,querySelectorAll:s=>s.startsWith('a.')?[button]:cards},MutationObserver:class{observe(){} disconnect(){}},setTimeout:()=>1,clearTimeout:()=>{},addEventListener:()=>{},sessionStorage:{getItem:()=>null,setItem:()=>{}},Date,...extra}; ctx.window.top=ctx.window;
+ const ctx={URL,location,window:{},chrome:{storage:{local:{get:async()=>({enabled:true,preferredEmail:'',...settings}),set:async()=>{}},onChanged:{addListener:()=>{}}}},document:{documentElement:{},querySelector:()=>null,querySelectorAll:s=>s.startsWith('a.')?[button]:cards},MutationObserver:class{observe(){} disconnect(){}},setTimeout:()=>1,clearTimeout:()=>{},setInterval:()=>1,clearInterval:()=>{},addEventListener:()=>{},sessionStorage:{getItem:()=>null,setItem:()=>{}},Date,...extra}; ctx.window.top=ctx.window;
  vm.runInNewContext(core,ctx);vm.runInNewContext(content,ctx); await new Promise(resolve=>setImmediate(resolve)); return clicks;
 }
 (async()=>{
  for(const [name,url,emails,settings,expected] of [['Clicks valid chooser once',valid,[one],{},1],['Unrelated Google untouched','https://accounts.google.com/v3/signin/accountchooser',[one],{},0],['Disabled untouched',valid,[one],{enabled:false},0],['Ambiguous chooser untouched',valid,[one,two],{},0],['Preferred chooser works',valid,[one,two],{preferredEmail:two},1],['Quanta login button works','https://quanta.bits-pilani.ac.in/login/index.php?loginredirect=1',[],{},1],['Dashboard untouched','https://quanta.bits-pilani.ac.in/my/',[],{},0],['Logout untouched','https://quanta.bits-pilani.ac.in/login/index.php?logout=1',[],{},0]]) {assert.equal(await run(url,emails,settings),expected,name); count++; console.log('PASS '+name);}
  assert.equal(await run(valid,[one],{}, {sessionStorage:{getItem:()=>String(Date.now()),setItem:()=>{}}}),0);count++;
+ assert.equal(await run(valid,[one],{}, {sessionStorage:{getItem:()=>{throw new Error('Storage blocked');},setItem:()=>{throw new Error('Storage blocked');}}}),1); count++; console.log('PASS Firefox blocked page storage still selects account');
+ assert.equal(await run(valid,[one],{}, {browser:{storage:{local:{get:async()=>({enabled:true,preferredEmail:''}),set:async()=>{}},onChanged:{addListener:()=>{}}}},chrome:undefined}),1); count++; console.log('PASS Firefox browser API works without chrome API');
+ let retry, ready=false, delayedClicks=0, cleared=false;
+ const delayedCard={getClientRects:()=>ready?[1]:[],getAttribute:()=>null,click:()=>delayedClicks++};
+ const delayedMarker={getAttribute:k=>k==='data-identifier'?one:null,closest:()=>delayedCard};
+ await run(valid,[],{}, {document:{documentElement:{},querySelector:()=>null,querySelectorAll:()=>[delayedMarker]},setInterval:fn=>{retry=fn;return 1;},clearInterval:()=>{cleared=true;}});
+ assert.equal(delayedClicks,0); ready=true; retry(); retry(); assert.equal(delayedClicks,1);assert.equal(cleared,true);count++;console.log('PASS Late-visible account is clicked once and polling stops');
  console.log(`${count} checks passed`);
 })().catch(e=>{console.error(e);process.exitCode=1;});
 

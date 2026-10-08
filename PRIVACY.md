@@ -2,7 +2,7 @@
 
 This unofficial extension helps select an existing college Google account during BITS Quanta login.
 
-It stores an enable/disable setting and, if you provide it, your preferred college email address in the browser's local extension storage. These settings are not synced by this extension or sent to its developer. Browser profile backup mechanisms may retain local settings.
+It stores an enable/disable setting and, if you provide it, your preferred college email address in the browser's local extension storage. It also stores a short, local last-attempt status (such as missing account or selected account); this contains no email addresses or sign-in URLs. These settings and status are not synced by this extension or sent to its developer. Browser profile backup mechanisms may retain local settings.
 
 On the Quanta login page, it reads the existing BITS Gmail login link. On Google Accounts pages, it checks the sign-in URL for Quanta's SAML return destination before reading visible account identifiers and clicking a matching account. It does not read passwords, MFA codes, cookies, mail, course content, or browsing history.
 
